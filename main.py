@@ -21,4 +21,4 @@ def scrape_main(request):
     #     name = request_args['name']
     # else:
     #     name = 'World'
-    # return 'Hello {}!'.format(escape(name))
+    return 'Hello {}!'.format(escape("HTTP fucntions"))
