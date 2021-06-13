@@ -1,5 +1,5 @@
 
-def hello_world(request):
+def get_scraping_task(request):
     """Responds to any HTTP request.
     Args:
         request (flask.Request): HTTP request object.
@@ -9,9 +9,9 @@ def hello_world(request):
         `make_response <http://flask.pocoo.org/docs/1.0/api/#flask.Flask.make_response>`.
     """
     request_json = request.get_json()
-    if request.args and 'message' in request.args:
-        return request.args.get('message')
-    elif request_json and 'message' in request_json:
-        return request_json['message']
+    if request_json and 'bucket_name' in request_json:
+        print(request_json['bucket_name'])
+        print(request_json['file_name'])
+        return "post success!!"
     else:
-        return f'Hello World!'
+        return "post failed!!"
