@@ -5,6 +5,7 @@ import requests as rq
 
 import scrape_base
 import const
+import lib
 
 
 class HotPepper(scrape_base.Scrape_Base):
@@ -21,6 +22,9 @@ class HotPepper(scrape_base.Scrape_Base):
                 './/ns:name',
                 namespaces={
                     'ns': "http://webservice.recruit.co.jp/HotPepper/"})[0].text
+
+            # スペースがある場合削除
+            shop_name = lib.remove_spaces(shop_name)
 
             # 住所
             address = restaurant.xpath(
@@ -66,3 +70,11 @@ class HotPepper(scrape_base.Scrape_Base):
 
             restaurant_info = scrape_base.Restaurant(
                 shop_name, None, address, prefecture_id, description, link_url)
+
+            # 既存データがあるかどうか
+            res_uuid = self.search_shop_data(restaurant_info)
+            if res_uuid:
+                self.update_shop_data(restaurant_info, res_uuid)
+            else:
+                # 保存処理
+                self.save_shop_data(restaurant_info)

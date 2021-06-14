@@ -29,18 +29,14 @@ def get_scraping_task(request):
             blob = bucket.get_blob(file_name)
             file_text = blob.download_as_text()
 
-            # スクレイピング処理
+            # スクレイピング+DBへの保存処理
             site_info = re.match(r'(.+)/(.+)', file_name).groups()
             if site_info[0] == 'hotpepper':
                 restaurant = hotpepper.HotPepper()
                 restaurant.scrape_restaurant(file_text)
-
-            print(blob)
-            print("OK")
+            print("save db success!")
 
         except BaseException as e:
             print(e)
-
-        return "post success!!"
     else:
         return "post failed!!"
