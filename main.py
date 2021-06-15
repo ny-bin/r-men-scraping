@@ -5,7 +5,7 @@ import hotpepper
 
 import settings
 
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = settings.GCS_API
+# os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = settings.GCS_API
 
 
 def get_scraping_task(request):
