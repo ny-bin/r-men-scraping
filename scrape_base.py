@@ -1,6 +1,7 @@
 from __future__ import annotations
 from abc import ABCMeta
 from abc import abstractmethod
+import datetime
 
 import db_lib
 
@@ -35,34 +36,40 @@ class Scrape_Base(metaclass=ABCMeta):
                  restaurant.prefecture_id,
                  restaurant.description))
         self.con.commit()
-        # db_lib.insert_execute(self.con, sql)
 
     def update_shop_data(self, restaurant: Restaurant, uuid: str):
         # DBへ保存
+        now = datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S%z")
         sql = f"""update shops
                             set
                                 phone_number = %s,
                                 prefecture_id = %s,
-                                description = %s
-                                updated_at =
-                            where uuid = {uuid}
-                            )"""
+                                description = %s,
+                                updated_at = %s
+                            where id= %s
+                            """
 
         with self.con.cursor() as cur:
             cur.execute(
                 sql,
                 (restaurant.phone_number,
                  restaurant.prefecture_id,
-                 restaurant.description))
+                 restaurant.description,
+                 now,
+                 uuid[0][0]
+                 ))
         self.con.commit()
 
     def search_shop_data(self, restaurant: Restaurant):
         # 店舗名が同一のデータがあるかチェック
         sql = f"""select *
                     from shops
-                        where name='{restaurant.restaurant_name}'
+                        where name= %s
                             """
-        res = db_lib.select_execute(self.con, sql)
+        with self.con.cursor() as cur:
+            cur.execute(sql, (restaurant.restaurant_name,))
+            res = cur.fetchall()
+
         if res:
             return res
         else:

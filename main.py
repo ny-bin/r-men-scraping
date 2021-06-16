@@ -35,8 +35,12 @@ def get_scraping_task(request):
                 restaurant = hotpepper.HotPepper()
                 restaurant.scrape_restaurant(file_text)
             print("save db success!")
+            return 'Message published.'
 
         except BaseException as e:
             print(e)
+            return (e, 500)
+
     else:
-        return "post failed!!"
+        print("save db failed!")
+        return 'No site.'
