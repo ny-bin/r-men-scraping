@@ -44,7 +44,7 @@ class HotPepper(scrape_base.Scrape_Base):
                 prefecture == "大阪府"
             elif prefecture == "京都":
                 prefecture = "京都府"
-            elif "県" in prefecture:
+            elif "県" not in prefecture:
                 prefecture = prefecture + "県"
 
             prefecture_id = const.prefecture_dic[prefecture]
